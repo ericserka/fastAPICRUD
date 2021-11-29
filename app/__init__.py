@@ -3,6 +3,7 @@ from sqlalchemy import MetaData, create_engine
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
@@ -22,6 +23,13 @@ metadata = MetaData(
 )
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.state.database = database
 
 
@@ -39,4 +47,4 @@ async def shutdown() -> None:
         await database_.disconnect()
 
 
-from app.views import noticiaViews, pessoaViews
+from app.views import noticia, pessoa
